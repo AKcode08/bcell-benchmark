@@ -401,27 +401,6 @@ Execute in order: `06_residue_level` → `06a_linear_level` → `06b_conformatio
 
 ---
 
-## Repository notes
-
-Items a reader may otherwise trip over:
-
-- **`scripts/` covers dataset construction, output standardisation and benchmarking only.**
-  The predictors themselves are upstream projects — see *Upstream predictor implementations*.
-- **RoBep output filenames are lowercased accessions** (`a0a0h3ggm3.json`, not `A0A0H3GGM3.json`)
-  because the upstream implementation lowercases internally. The `robep_indexed.csv` step
-  restores canonical UniProt casing; match case-insensitively if you read the raw files.
-- **`05k_combine_sema_csv.py` points at `outputs/SEMAi`** while the directory is `outputs/sema`;
-  adjust `BASE_DIR` before running. Its `THRESHOLD` constant (0.51) also differs from the SEMA-3D
-  epitope threshold used elsewhere in the project (0.361, inclusive `>=`).
-- **`02a_split_fasta.sh` expects a filename that is not on disk.** It reads
-  `inputs/{ORG}/linear/{ORG}_sequences.fasta`, but the files written by step 1 are named
-  `{ORG}_linear_sequences.fasta`. Rename or adjust `IN=` before running it.
-- **`05l_sema_benchmark.py`** prints a usage string referring to `05f_sema_benchmark.py`.
-- **`08_bias_analysis_patched.ipynb`** is the version corresponding to the reported results;
-  `08_bias_analysis.ipynb` is retained as the pre-correction copy.
-
----
-
 ## Deposition
 
 This repository is the **published subset** of a larger working tree that also holds model
