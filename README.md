@@ -199,7 +199,7 @@ All notebooks run from `scripts/` and read `../outputs`, `../iedb`, `../structur
 | `06a_linear_level.ipynb` | Linear region recovery vs random, detection rates (Fig. 3, Table S3) |
 | `06b_conformational_level.ipynb` | Conformational region recovery, predictor agreement and spatial overlap (Fig. 4, Fig. 7, Tables S4, S7) |
 | `07_dataset_characterization.ipynb` | Dataset composition, length and pLDDT distributions (Tables 1–2, Fig. S1) |
-| `08_bias_analysis_patched.ipynb` | Antigen-property Spearman correlations and OLS models (Fig. S2, Table S5) |
+| `08_bias_analysis.ipynb` | Antigen-property Spearman correlations and multivariable models (Fig. S2, Table S5) |
 
 ---
 
@@ -358,7 +358,7 @@ jupyter lab
 ```
 
 Execute in order: `06_residue_level` → `06a_linear_level` → `06b_conformational_level` →
-`07_dataset_characterization` → `08_bias_analysis_patched`.
+`07_dataset_characterization` → `08_bias_analysis`.
 
 > **Note:** `06`, `06a` and `08` write figures to the working directory (`scripts/`); `06b` and
 > `07` write to `../figures/`. Move the former into `figures/` after running, or launch Jupyter
