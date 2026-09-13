@@ -73,7 +73,8 @@ fi
 
 # One authenticated connection reused by every phase, so password/2FA is
 # entered once rather than per rsync invocation.
-SSH_CTL="${TMPDIR:-/tmp}/bbsync-%r@%h-%p"
+mkdir -p "${HOME}/.ssh" 2>/dev/null || true
+SSH_CTL="${HOME}/.ssh/cm-%C"
 SSH_OPTS=(-o ControlMaster=auto -o "ControlPath=${SSH_CTL}" -o ControlPersist=10m -o ConnectTimeout=20)
 SSH_CMD="ssh -o ControlMaster=auto -o ControlPath=${SSH_CTL} -o ControlPersist=10m -o ConnectTimeout=20"
 
@@ -99,8 +100,13 @@ if ! ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${REMOTE_HOST}" \
 
 Could not authenticate to ${REMOTE_USER}@${REMOTE_HOST}, or ${REMOTE_PATH} is missing.
 
-  "Permission denied (publickey,...)" means the host answered and rejected your
-  credentials -- the network is fine, the login is not. Check, in order:
+  Read the error printed above this message -- it names the actual cause.
+    "Permission denied (publickey,...)"  -> the host answered, credentials rejected.
+    "too long for Unix domain socket"    -> ControlPath issue; report it, this
+                                            script sets a short one under ~/.ssh.
+    "Connection timed out"               -> network or VPN.
+
+  For a credentials problem, check in order:
 
     1. ssh ${REMOTE_USER}@${REMOTE_HOST}          # does a plain login work?
     2. grep -iA5 bluebear ~/.ssh/config           # is there a Host alias with a
