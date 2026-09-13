@@ -53,36 +53,62 @@ if [[ $WEIGHTS -eq 0 ]]; then
   EXCLUDES+=("${WEIGHT_EXCLUDES[@]}")
 fi
 
+# One authenticated connection reused by every phase, so password/2FA is
+# entered once rather than per rsync invocation.
+SSH_CTL="${TMPDIR:-/tmp}/bbsync-%r@%h-%p"
+SSH_OPTS=(-o ControlMaster=auto -o "ControlPath=${SSH_CTL}" -o ControlPersist=10m -o ConnectTimeout=20)
+SSH_CMD="ssh -o ControlMaster=auto -o ControlPath=${SSH_CTL} -o ControlPersist=10m -o ConnectTimeout=20"
+
 banner() { printf '\n\033[1m=== %s ===\033[0m\n' "$1"; }
 [[ -n "$DRY" ]] && printf '\n\033[33mDRY RUN — no files will be transferred. Re-run with --apply.\033[0m\n'
 
-banner "Phase 0: remote reachable?"
-ssh -o BatchMode=yes -o ConnectTimeout=10 "${REMOTE_USER}@${REMOTE_HOST}" \
-    "test -d '${REMOTE_PATH}' && du -sh '${REMOTE_PATH}' 2>/dev/null" \
-  || { echo "Cannot reach ${REMOTE_HOST} or path missing. Check VPN / SSH key."; exit 1; }
+banner "Phase 0: authenticate (you may be prompted once)"
+if ! ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${REMOTE_HOST}" \
+        "test -d '${REMOTE_PATH}' && du -sh '${REMOTE_PATH}' 2>/dev/null"; then
+  cat <<DIAG
+
+Could not authenticate to ${REMOTE_USER}@${REMOTE_HOST}, or ${REMOTE_PATH} is missing.
+
+  "Permission denied (publickey,...)" means the host answered and rejected your
+  credentials -- the network is fine, the login is not. Check, in order:
+
+    1. ssh ${REMOTE_USER}@${REMOTE_HOST}          # does a plain login work?
+    2. grep -iA5 bluebear ~/.ssh/config           # is there a Host alias with a
+                                                  # different user or IdentityFile?
+    3. ssh-add -l                                 # is your key loaded in the agent?
+    4. Is the username right? This script assumes REMOTE_USER=${REMOTE_USER}.
+
+  Override any of them without editing this file:
+    REMOTE_USER=xxx REMOTE_HOST=yyy ./sync_bluebear.sh
+
+DIAG
+  exit 1
+fi
 
 banner "Phase 1: what exists on BlueBEAR but not here (would be pulled DOWN)"
-rsync -azi --dry-run --ignore-existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
+rsync -azi -e "$SSH_CMD" --dry-run --ignore-existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
   | grep -E '^[<>]' | awk '{print "  + " $2}' | head -60
 echo "  ..."
-rsync -az --dry-run --stats --ignore-existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
+rsync -az -e "$SSH_CMD" --dry-run --stats --ignore-existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
   | grep -E 'Number of regular files transferred|Total transferred file size'
 
 banner "Phase 2: CONFLICTS — exist on both sides but differ (NOT touched by this script)"
-rsync -azi --dry-run --existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
+rsync -azi -e "$SSH_CMD" --dry-run --existing "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/" \
   | grep -E '^>f.*[cst]' | awk '{print "  ! " $2}' | head -40 \
   || echo "  (none)"
 echo "  ^ resolve these by hand; nothing above was modified."
 
 banner "Phase 3: pulling BlueBEAR -> local (additive only)"
-rsync -az --info=progress2 --human-readable $DRY --ignore-existing \
+rsync -az -e "$SSH_CMD" --info=progress2 --human-readable $DRY --ignore-existing \
       "${EXCLUDES[@]}" "$REMOTE" "$LOCAL_PATH/"
 
 if [[ $PUSH -eq 1 ]]; then
   banner "Phase 4: pushing local-only files -> BlueBEAR (additive only)"
-  rsync -az --info=progress2 --human-readable $DRY --ignore-existing \
+  rsync -az -e "$SSH_CMD" --info=progress2 --human-readable $DRY --ignore-existing \
         "${EXCLUDES[@]}" "$LOCAL_PATH/" "$REMOTE"
 fi
+
+ssh "${SSH_OPTS[@]}" -O exit "${REMOTE_USER}@${REMOTE_HOST}" 2>/dev/null || true
 
 banner "Done"
 [[ -n "$DRY" ]] && echo "That was a dry run. Re-run with --apply to transfer." || du -sh "$LOCAL_PATH"
