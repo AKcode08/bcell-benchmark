@@ -487,13 +487,14 @@ variable if your account differs.
 
 ### Release status
 
-The repository is **private** pending viva and journal submission, matching the manuscript's
-data-availability statement ("available in a public GitHub repository upon publication"). Before
+The repository lives at <https://github.com/AKcode08/bcell-benchmark> and is currently **private**, pending viva
+and journal submission, matching the manuscript's data-availability statement ("available in a public GitHub repository upon publication"). Before
 making it public:
 
 - [ ] Pin upstream commit SHAs for GraphBepi, SEMA-3D and RoBep
-- [ ] Sync RoBep's driver scripts in from BlueBEAR, or cite their upstream commit
-- [ ] Replace the placeholder repository URL, institutional email and ORCID
+- [ ] Cite RoBep's driver scripts by upstream commit — they stay on BlueBEAR under `models/`
+- [ ] Add institutional email and ORCID
+- [ ] Flip the repository to public (`gh repo edit --visibility public`)
 - [ ] Replace the thesis citation with the journal citation
 - [ ] Confirm IEDB redistribution terms for the raw exports under `iedb/`
 - [ ] Confirm the release with Dr. Bender
@@ -519,6 +520,17 @@ If you use this code or the benchmark dataset, please cite:
 
 <!-- TODO: replace with the journal citation once the manuscript is published. -->
 
+The repository itself:
+
+```bibtex
+@software{kumar2026bcellcode,
+  author    = {Kumar, Aman},
+  title     = {Benchmarking B-cell epitope prediction across bacterial antigens: benchmark code and data},
+  year      = {2026},
+  url       = {https://github.com/AKcode08/bcell-benchmark}
+}
+```
+
 Please also cite the underlying resources — IEDB, UniProt, the AlphaFold Protein Structure
 Database — and the individual predictors, listed in the manuscript References.
 
@@ -527,7 +539,9 @@ Database — and the individual predictors, listed in the manuscript References.
 **Aman Kumar** — MSc Bioinformatics, University of Birmingham
 amanaastha.ak@gmail.com
 
-<!-- TODO: add institutional email, ORCID and the public repository URL before deposition. -->
+Repository: <https://github.com/AKcode08/bcell-benchmark>
+
+<!-- TODO: add institutional email and ORCID before deposition. -->
 
 Supervisors: Dr. Andreas Bender, Dr. Mohamed El-Hadidi.
 
