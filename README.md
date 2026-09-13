@@ -429,6 +429,77 @@ Items a reader may otherwise trip over:
 
 ---
 
+## Deposition
+
+This repository is the **published subset** of a larger working tree. The full tree — including
+model weights, the upstream predictor implementations under `models/`, raw per-antigen predictor
+outputs and the AlphaFold PDBs — lives on BlueBEAR at
+`/rds/projects/e/elhamsak-epitope-dev/bcell_benchmark/` and in the local clone. `.gitignore`
+selects what is published; nothing tracked here depends on anything excluded.
+
+### What is omitted, and how to regenerate it
+
+| Omitted | Size | How to restore |
+|---|---|---|
+| AlphaFold PDB structures | ~98 MB | `python scripts/03b_pdb_download.py --organism <ORG>` |
+| Zipped structure archives | ~22 MB | `./scripts/03c_zip_structures.sh` |
+| Raw per-antigen predictor outputs | ~169 MB | Re-run the predictors (four are web services — results reflect server state on the access date) |
+| COV / ENZA viral groups | ~220 MB | Curated but excluded from the benchmark; not required by any analysis |
+| `models/` (upstream implementations + checkpoints) | ~13 GB | Clone each upstream repository; see below |
+| Python environments, caches, logs | — | See *Environment setup* |
+
+The standardised `*_indexed.csv` tables **are** tracked, so every analysis notebook (06–08) runs
+from a clean clone without restoring any of the above.
+
+### Upstream predictor implementations
+
+`models/` is excluded because each upstream project carries its own licence and cannot be
+redistributed under this repository's MIT terms. Cite them by URL and pinned commit instead:
+
+| Predictor | Upstream |
+|---|---|
+| GraphBepi | https://github.com/biomed-AI/GraphBepi |
+| SEMA-3D | https://github.com/AIRI-Institute/SEMAi |
+| RoBep | see Xu et al. 2026 |
+
+<!-- TODO: pin the exact commit SHA used for each, from models/ on BlueBEAR. -->
+
+If any driver scripts you wrote yourself live under `models/` — RoBep's two-phase pipeline in
+particular — re-include them explicitly in `.gitignore` (there is a commented example) so the
+RoBep path is reproducible from this repository alone.
+
+### Keeping the two trees in step
+
+`sync_bluebear.sh` merges the BlueBEAR tree into the local clone. It is **additive only**:
+nothing is deleted on either side and nothing already present locally is overwritten. Files that
+exist on both sides but differ are reported as conflicts for you to resolve by hand.
+
+```bash
+./sync_bluebear.sh                        # dry run — shows what would move, transfers nothing
+./sync_bluebear.sh --apply                # pull, excluding model weights
+./sync_bluebear.sh --apply --with-weights # include checkpoints (~13 GB)
+./sync_bluebear.sh --apply --push         # also send local-only files back up
+```
+
+Requires an SSH key and VPN access to BlueBEAR, so it must be run from a machine with those —
+not from a cloud session. Override `REMOTE_USER`, `REMOTE_HOST` or `REMOTE_PATH` by environment
+variable if your account differs.
+
+### Release status
+
+The repository is **private** pending viva and journal submission, matching the manuscript's
+data-availability statement ("available in a public GitHub repository upon publication"). Before
+making it public:
+
+- [ ] Pin upstream commit SHAs for GraphBepi, SEMA-3D and RoBep
+- [ ] Sync RoBep's driver scripts in from BlueBEAR, or cite their upstream commit
+- [ ] Replace the placeholder repository URL, institutional email and ORCID
+- [ ] Replace the thesis citation with the journal citation
+- [ ] Confirm IEDB redistribution terms for the raw exports under `iedb/`
+- [ ] Confirm the release with Dr. Bender
+
+---
+
 ## Citation
 
 If you use this code or the benchmark dataset, please cite:
