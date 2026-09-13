@@ -454,7 +454,7 @@ The repository itself:
 
 ```bibtex
 @software{kumar2026bcellcode,
-  author    = {Kumar, Aman and Hao, Yuan and Tr{\u a}istaru, Patricia-Raluca and
+  author    = {Kumar, Aman and Hao, Yuan and Truaistaru, Patricia-Raluca and
                Cojocaru, Vlad and El-Hadidi, Mohamed and Bender, Andreas},
   title     = {Benchmarking B-cell epitope prediction across bacterial antigens: benchmark code and data},
   year      = {2026},
