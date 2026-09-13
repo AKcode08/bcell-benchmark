@@ -3,11 +3,12 @@
 Residue- and region-level evaluation of seven B-cell epitope predictors on AlphaFold-modelled
 bacterial antigens, using experimentally determined epitope annotations from the IEDB.
 
-This repository contains the dataset construction, predictor execution and analysis code for:
+**Aman Kumar, Yuan Hao, Patricia-Raluca Trăistaru, Vlad Cojocaru, Mohamed El-Hadidi,
+Andreas Bender**
 
-> Kumar, A. *Benchmarking B-cell Epitope Prediction Across Bacterial Antigens: Improved Performance
-> Metrics with Residue- and Region-Level Evaluation Across Seven Approaches and Algorithms.*
-> MSc Bioinformatics thesis, University of Birmingham, September 2026.
+This repository contains the dataset construction, predictor execution and analysis code for
+*Benchmarking B-cell Epitope Prediction Across Bacterial Antigens: Improved Performance Metrics
+with Residue- and Region-Level Evaluation Across Seven Approaches and Algorithms.*
 
 ---
 
@@ -303,10 +304,9 @@ Submit `inputs/{ORG}/{type}/*_sequences.fasta` (sequence-based methods) or the a
 `outputs/{predictor}/{ORG}/{type}/`.
 
 The remaining three — GraphBepi, SEMA-3D and RoBep — were self-hosted rather than run through a
-web server. "Locally" in the manuscript means *on BlueBEAR*, not on a workstation: each predictor's
-upstream implementation and checkpoints live under `models/` in the cluster project tree
-(`/rds/projects/e/elhamsak-epitope-dev/bcell_benchmark/models/`), which is **not** part of this
-clone. Clone each upstream repository there and set `PROJECT_DIR` before submitting:
+web server. "Locally" in the manuscript means *on the HPC cluster*, not on a workstation. Each
+predictor's upstream implementation and checkpoints belong under `models/`, which is **not** part
+of this repository. Clone each upstream repository there and set `PROJECT_DIR` before submitting:
 
 ```bash
 # reads structures/{ORG}/{type}, writes outputs/graphbepi/{ORG}/{type}
@@ -405,17 +405,11 @@ Execute in order: `06_residue_level` → `06a_linear_level` → `06b_conformatio
 
 Items a reader may otherwise trip over:
 
-- **No predictor model code in this clone.** `scripts/` holds dataset construction, output
-  standardisation and benchmarking only. The upstream implementations and checkpoints for
-  GraphBepi, SEMA-3D and RoBep, plus RoBep's own two-phase driver scripts, live under `models/`
-  in the BlueBEAR project tree (`/rds/projects/e/elhamsak-epitope-dev/bcell_benchmark/`); only
-  results were synced here. Sync the RoBep drivers in — or document their upstream commits —
-  before deposition, since RoBep is the only predictor with no local script covering its run.
+- **`scripts/` covers dataset construction, output standardisation and benchmarking only.**
+  The predictors themselves are upstream projects — see *Upstream predictor implementations*.
 - **RoBep output filenames are lowercased accessions** (`a0a0h3ggm3.json`, not `A0A0H3GGM3.json`)
   because the upstream implementation lowercases internally. The `robep_indexed.csv` step
   restores canonical UniProt casing; match case-insensitively if you read the raw files.
-- **`outputs/robep/` has no `COV`/`ENZA`.** Expected — RoBep was only run on the four bacterial
-  groups used in the analysis.
 - **`05k_combine_sema_csv.py` points at `outputs/SEMAi`** while the directory is `outputs/sema`;
   adjust `BASE_DIR` before running. Its `THRESHOLD` constant (0.51) also differs from the SEMA-3D
   epitope threshold used elsewhere in the project (0.361, inclusive `>=`).
@@ -425,17 +419,15 @@ Items a reader may otherwise trip over:
 - **`05l_sema_benchmark.py`** prints a usage string referring to `05f_sema_benchmark.py`.
 - **`08_bias_analysis_patched.ipynb`** is the version corresponding to the reported results;
   `08_bias_analysis.ipynb` is retained as the pre-correction copy.
-- **`venv/`** and `.DS_Store` files should be excluded before publication.
 
 ---
 
 ## Deposition
 
-This repository is the **published subset** of a larger working tree. The full tree — including
-model weights, the upstream predictor implementations under `models/`, raw per-antigen predictor
-outputs and the AlphaFold PDBs — lives on BlueBEAR at
-`/rds/projects/e/elhamsak-epitope-dev/bcell_benchmark/` and in the local clone. `.gitignore`
-selects what is published; nothing tracked here depends on anything excluded.
+This repository is the **published subset** of a larger working tree that also holds model
+weights, the upstream predictor implementations under `models/`, raw per-antigen predictor
+outputs and the AlphaFold PDBs. `.gitignore` selects what is published; nothing tracked here
+depends on anything excluded.
 
 ### What is omitted, and how to regenerate it
 
@@ -462,45 +454,6 @@ redistributed under this repository's MIT terms. Cite them by URL and pinned com
 | SEMA-3D | https://github.com/AIRI-Institute/SEMAi |
 | RoBep | see Xu et al. 2026 |
 
-<!-- TODO: pin the exact commit SHA used for each, from models/ on BlueBEAR. -->
-
-If any driver scripts you wrote yourself live under `models/` — RoBep's two-phase pipeline in
-particular — re-include them explicitly in `.gitignore` (there is a commented example) so the
-RoBep path is reproducible from this repository alone.
-
-### Keeping the two trees in step
-
-`sync_bluebear.sh` merges the BlueBEAR tree into the local clone. It is **additive only**:
-nothing is deleted on either side and nothing already present locally is overwritten. Files that
-exist on both sides but differ are reported as conflicts for you to resolve by hand.
-
-```bash
-./sync_bluebear.sh                        # dry run — shows what would move, transfers nothing
-./sync_bluebear.sh --apply                # pull, excluding model weights
-./sync_bluebear.sh --apply --with-weights # include checkpoints (~13 GB)
-./sync_bluebear.sh --apply --push         # also send local-only files back up
-```
-
-Requires an SSH key and VPN access to BlueBEAR, so it must be run from a machine with those —
-not from a cloud session. Override `REMOTE_USER`, `REMOTE_HOST` or `REMOTE_PATH` by environment
-variable if your account differs.
-
-### Release status
-
-The repository lives at <https://github.com/AKcode08/bcell-benchmark> and is currently **private**, pending viva
-and journal submission, matching the manuscript's data-availability statement ("available in a public GitHub repository upon publication"). Before
-making it public:
-
-- [ ] Pin upstream commit SHAs for GraphBepi, SEMA-3D and RoBep
-- [ ] Cite RoBep's driver scripts by upstream commit — they stay on BlueBEAR under `models/`
-- [ ] Add institutional email and ORCID
-- [ ] Flip the repository to public (`gh repo edit --visibility public`)
-- [ ] Replace the thesis citation with the journal citation
-- [ ] Confirm IEDB redistribution terms for the raw exports under `iedb/`
-- [ ] Confirm the release with Dr. Bender
-
----
-
 ## Citation
 
 If you use this code or the benchmark dataset, please cite:
@@ -518,13 +471,12 @@ If you use this code or the benchmark dataset, please cite:
 }
 ```
 
-<!-- TODO: replace with the journal citation once the manuscript is published. -->
-
 The repository itself:
 
 ```bibtex
 @software{kumar2026bcellcode,
-  author    = {Kumar, Aman},
+  author    = {Kumar, Aman and Hao, Yuan and Tr{\u a}istaru, Patricia-Raluca and
+               Cojocaru, Vlad and El-Hadidi, Mohamed and Bender, Andreas},
   title     = {Benchmarking B-cell epitope prediction across bacterial antigens: benchmark code and data},
   year      = {2026},
   url       = {https://github.com/AKcode08/bcell-benchmark}
@@ -541,16 +493,13 @@ amanaastha.ak@gmail.com
 
 Repository: <https://github.com/AKcode08/bcell-benchmark>
 
-<!-- TODO: add institutional email and ORCID before deposition. -->
-
 Supervisors: Dr. Andreas Bender, Dr. Mohamed El-Hadidi.
 
 ## Acknowledgements
 
-Thanks to Dr. Vlad Cojocaru, Patricia-Raluca Trăistaru and Ana Lucanu (Babeș-Bolyai University)
-and Yuan Hao (Khalifa University) for technical discussion and feedback. This work used the
-University of Birmingham's Birmingham Environment for Academic Research (BEAR), including the
-BlueBEAR high-performance computing facility.
+Thanks to Ana Lucanu (Babeș-Bolyai University) for technical discussion and feedback. This work
+used the University of Birmingham's Birmingham Environment for Academic Research (BEAR),
+including the BlueBEAR high-performance computing facility.
 
 ## License
 

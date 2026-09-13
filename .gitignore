@@ -81,3 +81,6 @@ notes.docx
 # outputs/ re-includes above.
 COV/
 ENZA/
+
+# Internal maintenance tool; not part of the published repository.
+sync_bluebear.sh
