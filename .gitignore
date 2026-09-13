@@ -1,0 +1,83 @@
+# ===========================================================================
+# Repository scope: code + derived data (~140 MB).
+#
+# The local working tree is the complete archive, including model weights and
+# raw per-antigen predictor outputs synced from BlueBEAR. This file selects the
+# subset that is published. Anything excluded here is either (a) regenerable by
+# a script in this repo, (b) third-party code with its own licence, or
+# (c) too large to belong in Git. See "Deposition" in README.md.
+# ===========================================================================
+
+# ---- Python environments ----
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+
+# ---- OS / editor ----
+.DS_Store
+.vscode/
+.idea/
+
+# ---- Model weights, embeddings and caches -------------------------------
+# Re-downloadable from upstream; tens of GB. Never in Git.
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.h5
+*.onnx
+hf_cache/
+data/embeddings/
+
+# ---- Third-party predictor implementations ------------------------------
+# models/ holds upstream clones (GraphBepi, SEMAi, RoBep). Each carries its own
+# licence and cannot be redistributed under this repository's MIT terms.
+# Cite them by upstream URL + commit in README.md instead.
+# To publish your OWN driver scripts that live under models/, re-include them
+# explicitly below, e.g.:
+#   !models/RoBep/run_*.py
+models/
+
+# ---- Job logs ----
+logs/
+
+# ---- Raw per-antigen predictor outputs ----------------------------------
+# ~169 MB across ~3,034 files. Every analysis notebook reads the standardised
+# *_indexed.csv tables instead, which ARE tracked. Regenerating the raw files
+# means re-running the predictors (four of them are web services).
+outputs/**
+!outputs/**/
+!outputs/**/*_indexed.csv
+
+# Redundant pooled aggregate (19 MB); no notebook reads it.
+outputs/robep_indexed_all.csv
+
+# ---- AlphaFold structures -----------------------------------------------
+# ~98 MB across 375 PDBs, regenerable:
+#   python scripts/03b_pdb_download.py --organism <ORG>
+structures/**/*.pdb
+
+# Zipped copies of the same PDBs, built by 03c_zip_structures.sh for web-server
+# upload. Redundant with the above.
+structures/**/*.zip
+
+# ...but keep the download manifests: they record exactly which AlphaFold model
+# was fetched for each accession, which is provenance the PDBs don't carry.
+!structures/**/*_manifest.csv
+!structures/.gitkeep
+
+# ---- Stale working notes -------------------------------------------------
+# Dataset panel note from 31-MAR-2026, superseded by README.md and the paper.
+notes.docx
+
+# ---- Viral groups --------------------------------------------------------
+# COV and ENZA are curated in the tree but excluded from the benchmark
+# (multi-chain complexity). ~220 MB. Must come last so it overrides the
+# outputs/ re-includes above.
+COV/
+ENZA/

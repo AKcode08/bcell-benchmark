@@ -1,0 +1,12 @@
+model,organism,group,type,uniprot,n_epitopes,n_hits,mean_recall,mean_precision
+DiscoTope,RESP,bacteria,conformational,P0DKX7,2,0,0.0335,0.0015
+DiscoTope,RESP,bacteria,conformational,P9WGU1,2,2,0.39049999999999996,0.087
+DiscoTope,RESP,bacteria,conformational,A0A0H2UQH5,1,0,0.167,0.017
+DiscoTope,RESP,bacteria,conformational,A0A0H2UR84,1,1,0.2,0.07
+DiscoTope,RESP,bacteria,conformational,P04977,1,1,0.143,0.034
+DiscoTope,RESP,bacteria,conformational,P04978,1,1,0.125,0.043
+DiscoTope,RESP,bacteria,conformational,P10324,1,1,0.4,0.138
+DiscoTope,RESP,bacteria,conformational,P17835,1,1,0.2,0.069
+DiscoTope,RESP,bacteria,conformational,P9WQ35,1,1,0.133,0.026
+DiscoTope,RESP,bacteria,conformational,Q79GX8,1,1,0.824,0.148
+DiscoTope,RESP,bacteria,conformational,Q97QP7,1,0,0.053,0.002

@@ -1,0 +1,9 @@
+organism,dataset_type,uniprot_id,download_status,source,alphafold_version,structure_id,download_url,structure_path,error
+GAST,conformational,A0A0H3N8Z2,downloaded,AlphaFold,v6,AF-A0A0H3N8Z2-F1,https://alphafold.ebi.ac.uk/files/AF-A0A0H3N8Z2-F1-model_v6.pdb,structures/GAST/conformational/A0A0H3N8Z2.pdb,
+GAST,conformational,A0A0H3NFG2,downloaded,AlphaFold,v6,AF-A0A0H3NFG2-F1,https://alphafold.ebi.ac.uk/files/AF-A0A0H3NFG2-F1-model_v6.pdb,structures/GAST/conformational/A0A0H3NFG2.pdb,
+GAST,conformational,A0A0H3NJI9,downloaded,AlphaFold,v6,AF-A0A0H3NJI9-F1,https://alphafold.ebi.ac.uk/files/AF-A0A0H3NJI9-F1-model_v6.pdb,structures/GAST/conformational/A0A0H3NJI9.pdb,
+GAST,conformational,P01556,downloaded,AlphaFold,v6,AF-P01556-F1,https://alphafold.ebi.ac.uk/files/AF-P01556-F1-model_v6.pdb,structures/GAST/conformational/P01556.pdb,
+GAST,conformational,P18013,downloaded,AlphaFold,v6,AF-P18013-F1,https://alphafold.ebi.ac.uk/files/AF-P18013-F1-model_v6.pdb,structures/GAST/conformational/P18013.pdb,
+GAST,conformational,Q57193,downloaded,AlphaFold,v6,AF-Q57193-F1,https://alphafold.ebi.ac.uk/files/AF-Q57193-F1-model_v6.pdb,structures/GAST/conformational/Q57193.pdb,
+GAST,conformational,Q9KMA6,downloaded,AlphaFold,v6,AF-Q9KMA6-F1,https://alphafold.ebi.ac.uk/files/AF-Q9KMA6-F1-model_v6.pdb,structures/GAST/conformational/Q9KMA6.pdb,
+GAST,conformational,Q9KRU4,downloaded,AlphaFold,v6,AF-Q9KRU4-F1,https://alphafold.ebi.ac.uk/files/AF-Q9KRU4-F1-model_v6.pdb,structures/GAST/conformational/Q9KRU4.pdb,

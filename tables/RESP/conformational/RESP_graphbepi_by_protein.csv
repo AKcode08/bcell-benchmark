@@ -1,0 +1,10 @@
+model,organism,group,type,uniprot,n_epitopes,n_hits,mean_recall,mean_precision
+GraphBepi,RESP,bacteria,conformational,P9WGU1,2,2,0.345,0.10200000000000001
+GraphBepi,RESP,bacteria,conformational,A0A0H2UQH5,1,0,0.0,0.0
+GraphBepi,RESP,bacteria,conformational,A0A0H2UR84,1,1,0.1,0.049
+GraphBepi,RESP,bacteria,conformational,P04977,1,0,0.071,0.027
+GraphBepi,RESP,bacteria,conformational,P04978,1,1,0.5,0.082
+GraphBepi,RESP,bacteria,conformational,P10324,1,1,0.4,0.067
+GraphBepi,RESP,bacteria,conformational,P17835,1,0,0.0,0.0
+GraphBepi,RESP,bacteria,conformational,P9WQ35,1,1,0.133,0.032
+GraphBepi,RESP,bacteria,conformational,Q79GX8,1,0,0.0,0.0

@@ -1,0 +1,9 @@
+model,organism,group,type,uniprot,n_epitopes,n_hits,mean_recall,mean_precision
+GraphBepi,GAST,bacteria,conformational,P01556,8,7,0.6355,0.04525
+GraphBepi,GAST,bacteria,conformational,Q9KMA6,3,3,0.9776666666666666,0.17
+GraphBepi,GAST,bacteria,conformational,A0A0H3N8Z2,2,0,0.0,0.0
+GraphBepi,GAST,bacteria,conformational,A0A0H3NJI9,2,0,0.0,0.0
+GraphBepi,GAST,bacteria,conformational,Q57193,2,2,1.0,0.050499999999999996
+GraphBepi,GAST,bacteria,conformational,A0A0H3NFG2,1,0,0.071,0.037
+GraphBepi,GAST,bacteria,conformational,P18013,1,1,0.769,0.052
+GraphBepi,GAST,bacteria,conformational,Q9KRU4,1,1,0.095,0.08

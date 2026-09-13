@@ -1,0 +1,3 @@
+model,organism,group,type,uniprot,n_epitopes,n_hits,mean_recall,mean_precision
+GraphBepi,INTRA,bacteria,conformational,P0DJM0,2,2,0.1535,0.073
+GraphBepi,INTRA,bacteria,conformational,P0DQD2,2,2,0.8945000000000001,0.1975

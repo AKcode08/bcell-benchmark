@@ -1,0 +1,3 @@
+model,organism,group,type,uniprot,n_epitopes,n_hits,mean_recall,mean_precision
+ElliPro,INTRA,bacteria,conformational,P0DJM0,2,0,0.0,0.0
+ElliPro,INTRA,bacteria,conformational,P0DQD2,2,2,0.1555,0.01

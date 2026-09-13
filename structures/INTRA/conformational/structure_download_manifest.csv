@@ -1,0 +1,3 @@
+organism,dataset_type,uniprot_id,download_status,source,alphafold_version,structure_id,download_url,structure_path,error
+INTRA,conformational,P0DJM0,downloaded,AlphaFold,v6,AF-P0DJM0-F1,https://alphafold.ebi.ac.uk/files/AF-P0DJM0-F1-model_v6.pdb,structures/INTRA/conformational/P0DJM0.pdb,
+INTRA,conformational,P0DQD2,downloaded,AlphaFold,v6,AF-P0DQD2-F1,https://alphafold.ebi.ac.uk/files/AF-P0DQD2-F1-model_v6.pdb,structures/INTRA/conformational/P0DQD2.pdb,
